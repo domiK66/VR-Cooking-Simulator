@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/VR Cooking Simulator/Scenes/FirstTry.unity
+    guid: 1b0bbd53c701b9648895a6f57fc53cd5
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 3876769f7c65f4347993cd6ed167e308, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: a5d426ee9de3da04dbf31c3f1f1fd899, type: 2}
