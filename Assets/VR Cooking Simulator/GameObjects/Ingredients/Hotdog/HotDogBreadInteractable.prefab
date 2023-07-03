@@ -720,7 +720,7 @@ GameObject:
   - component: {fileID: 1942255171093320273}
   m_Layer: 0
   m_Name: Bun02
-  m_TagString: Untagged
+  m_TagString: Ingredient
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -819,7 +819,7 @@ GameObject:
   - component: {fileID: 3379263459040348875}
   m_Layer: 0
   m_Name: Bun01
-  m_TagString: Untagged
+  m_TagString: Ingredient
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

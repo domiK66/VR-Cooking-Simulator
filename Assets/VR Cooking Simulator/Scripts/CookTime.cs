@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CookingState {
+    raw,
+    good,
+    burned
+}
 public class CookTime : MonoBehaviour
 {
-    private float time = 0f; // Cooking time in seconds
+    public float time = 0f; // Cooking time in seconds
+    public CookingState cookingState = CookingState.raw;
     private float targetTime; // Random target cooking time between 30 and 40 seconds
     public TextMesh timeText; // TextMesh component to display the time
     public Renderer Renderer; // Renderer component of the sausage
@@ -40,11 +46,14 @@ public class CookTime : MonoBehaviour
             {
                 // Apply good material
                 Renderer.material = goodMaterial;
+                cookingState = CookingState.good;
+                
             }
             else if (time >= targetTime + 10f)
             {
                 // Apply overcooked material
                 Renderer.material = overcookedMaterial;
+                cookingState = CookingState.burned;
             }
         }
     }

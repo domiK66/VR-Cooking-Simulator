@@ -6,6 +6,8 @@ TagManager:
   tags:
   - GrillAreaCollider
   - Centerable
+  - SamplesInfoPanel
+  - Ingredient
   layers:
   - Default
   - TransparentFX

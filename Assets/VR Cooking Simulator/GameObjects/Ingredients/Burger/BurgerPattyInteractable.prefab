@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 3768227454410398432}
   - component: {fileID: 7453999014128829484}
   - component: {fileID: 3564121565136852276}
-  - component: {fileID: 6149688328429348381}
+  - component: {fileID: 8357229599313403704}
   m_Layer: 0
   m_Name: BurgerPattyInteractable
   m_TagString: Untagged
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothTime: 0.2
---- !u!114 &6149688328429348381
+--- !u!114 &8357229599313403704
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -387,6 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11ca77b29d7132c438a9d80df4f6e9e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  time: 0
   timeText: {fileID: 6072872729707196706}
   Renderer: {fileID: 12441187538712935}
   goodMaterial: {fileID: 2100000, guid: eb554cb8688234f4d93bf70931432951, type: 2}
@@ -503,7 +504,7 @@ GameObject:
   - component: {fileID: 4902424251352454581}
   m_Layer: 0
   m_Name: BurgerPatty
-  m_TagString: Untagged
+  m_TagString: Ingredient
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
