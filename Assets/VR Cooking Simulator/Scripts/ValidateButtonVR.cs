@@ -18,10 +18,16 @@ public class ValidateButtonVR : MonoBehaviour
     public TextMeshProUGUI displayText; // Reference to the TextMeshProUGUI component in the Canvas
     public string[] ingredientsArray; // Array to store ingredient names
 
+    private OrderManager orderManager; // Reference to the OrderManager script
+
+
     void Start()
     {
         sound = GetComponent<AudioSource>();
         isPressed = false;
+
+        // Get the reference to the OrderManager script
+        orderManager = FindObjectOfType<OrderManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -85,6 +91,20 @@ public class ValidateButtonVR : MonoBehaviour
                 }
             }
         }
+
+        // Validate the order
+        bool isOrderValid = IsCurrentOrderValid();
+
+        if (isOrderValid)
+        {
+            Debug.Log("Order is valid!");
+            displayText.text += "Order is valid!" + "\n";
+        }
+        else
+        {
+            Debug.Log("Order is not valid!");
+            displayText.text += "Order is invalid!" + "\n";
+        }
     }
 
     private GameObject GetHighestParent(GameObject obj)
@@ -97,4 +117,38 @@ public class ValidateButtonVR : MonoBehaviour
         return parentTransform.gameObject;
     }
 
+    private bool IsCurrentOrderValid()
+    {
+        int currentOrderNumber = orderManager.nextOrderNumber - 1;
+        List<string> currentOrderIngredients = orderManager.orders[currentOrderNumber];
+
+        // Iterate over the colliders and check if they match the ingredients in the current order
+        Collider[] colliders = Physics.OverlapBox(targetCollider.bounds.center, targetCollider.bounds.extents, targetCollider.transform.rotation);
+        List<string> collidingIngredients = new List<string>();
+
+        foreach (Collider collider in colliders)
+        {
+            GameObject obj = collider.gameObject;
+            if (obj.CompareTag("Ingredient"))
+            {
+                collidingIngredients.Add(obj.name);
+            }
+        }
+
+        // Check if the colliding ingredients match the current order's ingredients
+        if (currentOrderIngredients.Count != collidingIngredients.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < currentOrderIngredients.Count; i++)
+        {
+            if (!collidingIngredients.Contains(currentOrderIngredients[i]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
