@@ -437,6 +437,7 @@ GameObject:
   - component: {fileID: 7936645407438905513}
   - component: {fileID: 918539515165550425}
   - component: {fileID: 6883132633570179477}
+  - component: {fileID: 4207597037964150621}
   m_Layer: 0
   m_Name: HotDogBreadInteractable
   m_TagString: Untagged
@@ -493,8 +494,8 @@ MonoBehaviour:
   _transferOnSecondSelection: 1
   _addNewPointsToFront: 0
   _forwardElement: {fileID: 0}
-  _oneGrabTransformer: {fileID: 0}
-  _twoGrabTransformer: {fileID: 0}
+  _oneGrabTransformer: {fileID: 4207597037964150621}
+  _twoGrabTransformer: {fileID: 4207597037964150621}
   _targetTransform: {fileID: 0}
   _maxGrabPoints: -1
 --- !u!114 &6883132633570179477
@@ -555,6 +556,19 @@ MonoBehaviour:
   _whenCancel:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4207597037964150621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4597554617359998717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a105c7917479fb4d96e208b042c9128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smoothTime: 0.2
 --- !u!1 &6126822386018544463
 GameObject:
   m_ObjectHideFlags: 0

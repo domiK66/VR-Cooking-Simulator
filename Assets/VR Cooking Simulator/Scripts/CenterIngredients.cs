@@ -5,7 +5,7 @@ using System.Linq;
 
 public class CenterIngredients : MonoBehaviour
 {
-
+    /*
     public Transform parentObject; // Parent object to which objects will be centered
 
 
@@ -33,7 +33,7 @@ public class CenterIngredients : MonoBehaviour
                 Debug.Log("test" + rigidbody.name);
                 rigidbody.isKinematic = true;
             }
-            */
+            
 
 
             other.transform.position = new Vector3((float)-0.0219999999, (float)currentStackHeight, (float)0.488000005);
@@ -43,8 +43,7 @@ public class CenterIngredients : MonoBehaviour
             string childName = "HandGrabInteractable"; // Replace with the name of the child GameObject you want to retrieve
             GameObject childObject = other.transform.GetChild(1).gameObject;
 
-            Destroy(child
-                Object);
+            Destroy(childObject);
 
             /// other.gameObject.AddComponent<Rigidbody>();
 
@@ -66,5 +65,6 @@ public class CenterIngredients : MonoBehaviour
     {
 
     }
+    */
 
 }

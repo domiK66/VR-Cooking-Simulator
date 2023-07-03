@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HotDogCookTime : MonoBehaviour
+public class CookTime : MonoBehaviour
 {
     private float time = 0f; // Cooking time in seconds
+    private float targetTime; // Random target cooking time between 30 and 40 seconds
     public TextMesh timeText; // TextMesh component to display the time
-    public Renderer sausageRenderer; // Renderer component of the sausage
+    public Renderer Renderer; // Renderer component of the sausage
     public Material goodMaterial;
     public Material overcookedMaterial;
     public string grillAreaTag; // Tag of the grill area collider
@@ -20,25 +21,35 @@ public class HotDogCookTime : MonoBehaviour
         {
             Debug.LogWarning("Grill area collider not found with tag: " + grillAreaTag);
         }
+
+    targetTime = Random.Range(15f, 30f);
+        
     }
 
     private void OnTriggerStay(Collider other)
     {
+        // Generate a random cooking time between 15 and 30 seconds
+    
+
         if (other.gameObject == grillAreaCollider)
         {
             time += Time.deltaTime;
-            timeText.text = "Cooking Time: " + time.ToString("F2") + "s";
+            timeText.text = time.ToString("F2") + "s";
 
-            if (time >= 30f && time < 40f)
+            if (time >= targetTime && time < targetTime + 10f)
             {
                 // Apply good material
-                sausageRenderer.material = goodMaterial;
+                Renderer.material = goodMaterial;
             }
-            else if (time >= 40f)
+            else if (time >= targetTime + 10f)
             {
                 // Apply overcooked material
-                sausageRenderer.material = overcookedMaterial;
+                Renderer.material = overcookedMaterial;
             }
         }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        timeText.text = "";
     }
 }
