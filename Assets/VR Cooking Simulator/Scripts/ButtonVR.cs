@@ -1,8 +1,3 @@
-/**************************************************
-Copyright : Copyright (c) RealaryVR. All rights reserved.
-Description: Script for VR Button functionality.
-***************************************************/
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +12,7 @@ public class ButtonVR : MonoBehaviour
     GameObject presser;
     AudioSource sound;
     bool isPressed;
-    public Vector3 offset; 
+    public Vector3 offset;
 
     void Start()
     {
@@ -49,8 +44,12 @@ public class ButtonVR : MonoBehaviour
 
     public void SpawnGameObject()
     {
-        Vector3 newPosition = transform.position + offset;
-        GameObject spawnedObject = Instantiate(prefab, newPosition, Quaternion.identity);
-    }
+        GameObject[] ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
 
+        if (ingredientObjects.Length < 20)
+        {
+            Vector3 newPosition = transform.position + offset;
+            GameObject spawnedObject = Instantiate(prefab, newPosition, Quaternion.identity);
+        }
+    }
 }

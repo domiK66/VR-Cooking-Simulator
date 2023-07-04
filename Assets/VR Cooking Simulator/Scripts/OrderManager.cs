@@ -15,7 +15,7 @@ public class OrderManager : MonoBehaviour
     {
         List<string> ingredients = new List<string>();
 
-        bool isBurger = Random.value < 0.5f;
+        bool isBurger = Random.value < 0.5;
 
         if (isBurger)
         {
@@ -33,7 +33,7 @@ public class OrderManager : MonoBehaviour
 
             foreach (string ingredient in burgerIngredients)
             {
-                if (Random.value < 0.5f) // Randomly include or exclude each ingredient
+                if (Random.value < 0.5) // Randomly include or exclude each ingredient
                 {
                     ingredients.Add(ingredient);
                 }
@@ -56,7 +56,7 @@ public class OrderManager : MonoBehaviour
         }
         else
         {
-            orderIngredientsText.text = "Burger with ";
+            orderIngredientsText.text = "Burger with Patty, ";
 
             string[] ingredientArray = ingredients
                 .Where(x => x != "BurgerBunTop" && x != "BurgerBunBottom" && x != "BurgerPatty")
@@ -64,20 +64,17 @@ public class OrderManager : MonoBehaviour
 
             for (int i = 0; i < ingredientArray.Length; i++)
             {
-                if (i > 0)
+                if (ingredientArray.Count() == 1)
                 {
-                    if (i == 1)
-                    {
-                        orderIngredientsText.text += ingredientArray[i] + ", ";
-                    }
-                    else
-                    {
-                        orderIngredientsText.text += ingredientArray[i];
-                    }
+                    orderIngredientsText.text += ingredientArray[i];
+                }
+                else if (i == ingredientArray.Length - 1)
+                {
+                    orderIngredientsText.text += "and " + ingredientArray[i];
                 }
                 else
                 {
-                    orderIngredientsText.text += ingredientArray[i];
+                    orderIngredientsText.text += ingredientArray[i] + ", ";
                 }
             }
         }
