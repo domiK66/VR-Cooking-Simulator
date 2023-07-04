@@ -17,8 +17,8 @@ public class ValidateButtonVR : MonoBehaviour
     public TextMeshProUGUI displayText; // Reference to the TextMeshProUGUI component in the Canvas
     public TextMeshProUGUI displayValidText; // Reference to the TextMeshProUGUI component in the Canvas
     public string[] ingredientsArray; // Array to store ingredient names
-    private OrderManager orderManager; // Reference to the OrderManager script
-    private MainMenu menu; // Reference to the OrderManager script
+    public OrderManager orderManager; // Reference to the OrderManager script
+    public MainMenu menu; // Reference to the OrderManager script
     public Color redColor = new Color(1f, 0f, 0f); // Red color (full red, no green or blue)
     public Color greenColor = new Color(0f, 1f, 0f); // Green color (full green, no red or blue)
     public bool isValid = false;
@@ -31,7 +31,6 @@ public class ValidateButtonVR : MonoBehaviour
         sound = GetComponent<AudioSource>();
         isPressed = false;
         // Get the reference to the OrderManager script
-        menu = FindObjectOfType<MainMenu>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -118,7 +117,6 @@ public class ValidateButtonVR : MonoBehaviour
     private void IsCurrentOrderValid()
     {
         // get the last element of the orders array
-        orderManager = FindObjectOfType<OrderManager>();
         Debug.Log(orderManager.orders.Count);
         List<string> currentOrderIngredients = orderManager.orders[orderManager.orders.Count];
 

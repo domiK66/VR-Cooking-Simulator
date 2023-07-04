@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CookingState {
+public enum CookingState
+{
     raw,
     good,
     burned
 }
+
 public class CookTime : MonoBehaviour
 {
     public float time = 0f; // Cooking time in seconds
@@ -17,8 +19,10 @@ public class CookTime : MonoBehaviour
     public Material goodMaterial;
     public Material overcookedMaterial;
     public string grillAreaTag; // Tag of the grill area collider
-
+    public AudioSource sound;
     private GameObject grillAreaCollider; // Reference to the grill area collider object
+
+    public ParticleSystem smokeParticles;
 
     private void Start()
     {
@@ -28,14 +32,22 @@ public class CookTime : MonoBehaviour
             Debug.LogWarning("Grill area collider not found with tag: " + grillAreaTag);
         }
 
-    targetTime = Random.Range(15f, 30f);
-        
+        targetTime = Random.Range(15f, 30f);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject == grillAreaCollider)
+        {
+            sound.Play();
+            smokeParticles.Play();
+        }
     }
 
     private void OnTriggerStay(Collider other)
     {
         // Generate a random cooking time between 15 and 30 seconds
-    
+
 
         if (other.gameObject == grillAreaCollider)
         {
@@ -47,7 +59,6 @@ public class CookTime : MonoBehaviour
                 // Apply good material
                 Renderer.material = goodMaterial;
                 cookingState = CookingState.good;
-                
             }
             else if (time >= targetTime + 10f)
             {
@@ -58,7 +69,10 @@ public class CookTime : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other) {
+    private void OnTriggerExit(Collider other)
+    {
         timeText.text = "";
+        sound.Stop();
+        smokeParticles.Stop();
     }
 }

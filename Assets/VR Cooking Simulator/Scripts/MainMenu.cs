@@ -6,16 +6,9 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject tutorialGameObjects;
     public GameObject newGameGameObjects;
-
+    public GameObject creditsGameObjects;
     public OrderManager orderManager;
-
     public ValidateButtonVR validateButtonVR;
-
-    void Start()
-    {
-        orderManager = FindObjectOfType<OrderManager>();
-        validateButtonVR = FindObjectOfType<ValidateButtonVR>();
-    }
 
     public void BackToMenu()
     {
@@ -31,9 +24,22 @@ public class MainMenu : MonoBehaviour
         validateButtonVR.displayValidText.text = "";
         validateButtonVR.displayText.text = "";
 
+        GameObject[] ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
+
+        foreach (GameObject obj in ingredientObjects)
+        {
+            Destroy(obj); // Destroy the object with the "Ingredient" tag
+        }
+
         gameObject.SetActive(true);
         newGameGameObjects.SetActive(false);
         tutorialGameObjects.SetActive(false);
+    }
+
+    public void BackToMenuFromCredits()
+    {
+        gameObject.SetActive(true);
+        creditsGameObjects.SetActive(false);
     }
 
     public void NewGame()
@@ -51,7 +57,11 @@ public class MainMenu : MonoBehaviour
         tutorialGameObjects.SetActive(true);
     }
 
-    public void OpenCredits() { }
+    public void OpenCredits()
+    {
+        gameObject.SetActive(false);
+        creditsGameObjects.SetActive(true);
+    }
 
     public void ExitGame()
     {

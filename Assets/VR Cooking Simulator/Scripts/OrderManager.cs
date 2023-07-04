@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 public class OrderManager : MonoBehaviour
 {
@@ -18,9 +19,27 @@ public class OrderManager : MonoBehaviour
 
         if (isBurger)
         {
-            ingredients.AddRange(
-                new string[] { "BurgerPatty", "BurgerBunTop", "BurgerBunBottom", "Tomato", "Salad" }
-            );
+            ingredients.Add("BurgerBunTop");
+            ingredients.Add("BurgerPatty");
+
+            List<string> burgerIngredients = new List<string>()
+            {
+                "Tomato",
+                "Salad",
+                "Cheese",
+                "Bacon",
+                "BurgerPatty"
+            };
+
+            foreach (string ingredient in burgerIngredients)
+            {
+                if (Random.value < 0.5f) // Randomly include or exclude each ingredient
+                {
+                    ingredients.Add(ingredient);
+                }
+            }
+
+            ingredients.Add("BurgerBunBottom");
         }
         else
         {
@@ -29,11 +48,39 @@ public class OrderManager : MonoBehaviour
 
         orders.Add(nextOrderNumber, ingredients);
 
-        //Debug.Log("Generated order #" + nextOrderNumber + ": " + string.Join(", ", ingredients));
-
         orderText.text = "Order #" + nextOrderNumber + ": ";
-        orderIngredientsText.text = string.Join(", ", ingredients);
+
+        if (ingredients.Contains("Bun01") && ingredients.Contains("Bun02"))
+        {
+            orderIngredientsText.text = "Hot Dog";
+        }
+        else
+        {
+            orderIngredientsText.text = "Burger with ";
+
+            string[] ingredientArray = ingredients
+                .Where(x => x != "BurgerBunTop" && x != "BurgerBunBottom" && x != "BurgerPatty")
+                .ToArray();
+
+            for (int i = 0; i < ingredientArray.Length; i++)
+            {
+                if (i > 0)
+                {
+                    if (i == 1)
+                    {
+                        orderIngredientsText.text += ingredientArray[i] + ", ";
+                    }
+                    else
+                    {
+                        orderIngredientsText.text += ingredientArray[i];
+                    }
+                }
+                else
+                {
+                    orderIngredientsText.text += ingredientArray[i];
+                }
+            }
+        }
         nextOrderNumber++;
     }
-
 }
