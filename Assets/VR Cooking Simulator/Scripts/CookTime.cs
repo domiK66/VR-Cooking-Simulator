@@ -14,7 +14,6 @@ public class CookTime : MonoBehaviour
     public float time = 0f; // Cooking time in seconds
     public CookingState cookingState = CookingState.raw;
     private float targetTime; // Random target cooking time between 30 and 40 seconds
-    public TextMesh timeText; // TextMesh component to display the time
     public Renderer Renderer; // Renderer component of the sausage
     public Material goodMaterial;
     public Material overcookedMaterial;
@@ -48,11 +47,9 @@ public class CookTime : MonoBehaviour
     {
         // Generate a random cooking time between 15 and 30 seconds
 
-
         if (other.gameObject == grillAreaCollider)
         {
             time += Time.deltaTime;
-            timeText.text = time.ToString("F2") + "s";
 
             if (time >= targetTime && time < targetTime + 10f)
             {
@@ -71,7 +68,6 @@ public class CookTime : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        timeText.text = "";
         sound.Stop();
         smokeParticles.Stop();
     }

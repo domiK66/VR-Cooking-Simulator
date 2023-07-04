@@ -174,7 +174,7 @@ public class ValidateButtonVR : MonoBehaviour
         }
     }
 
-    private GameObject GetHighestParent(GameObject obj)
+    public GameObject GetHighestParent(GameObject obj)
     {
         Transform parentTransform = obj.transform;
         while (parentTransform.parent != null)

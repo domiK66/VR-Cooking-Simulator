@@ -28,7 +28,8 @@ public class MainMenu : MonoBehaviour
 
         foreach (GameObject obj in ingredientObjects)
         {
-            Destroy(obj); // Destroy the object with the "Ingredient" tag
+            GameObject highestParent = validateButtonVR.GetHighestParent(obj);
+            Destroy(highestParent); // Destroy the parent object
         }
 
         gameObject.SetActive(true);
