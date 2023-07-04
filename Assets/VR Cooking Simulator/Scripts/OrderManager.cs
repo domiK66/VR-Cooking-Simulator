@@ -6,14 +6,9 @@ using TMPro;
 public class OrderManager : MonoBehaviour
 {
     public Dictionary<int, List<string>> orders = new Dictionary<int, List<string>>(); // Dictionary to store orders with order numbers
-    public int nextOrderNumber = 0; // Counter for the next order number
+    public int nextOrderNumber = 1; // Counter for the next order number
     public TextMeshProUGUI orderText; // Reference to the TextMeshProUGUI component for displaying the order
     public TextMeshProUGUI orderIngredientsText; // Reference to the TextMeshProUGUI component for displaying the order
-
-    void Start()
-    {
-        GenerateRandomOrder();
-    }
 
     public void GenerateRandomOrder()
     {
@@ -23,7 +18,9 @@ public class OrderManager : MonoBehaviour
 
         if (isBurger)
         {
-            ingredients.AddRange(new string[] { "BurgerPatty", "BurgerBunTop", "BurgerBunBottom", "Tomato", "Salad" });
+            ingredients.AddRange(
+                new string[] { "BurgerPatty", "BurgerBunTop", "BurgerBunBottom", "Tomato", "Salad" }
+            );
         }
         else
         {
@@ -38,4 +35,5 @@ public class OrderManager : MonoBehaviour
         orderIngredientsText.text = string.Join(", ", ingredients);
         nextOrderNumber++;
     }
+
 }

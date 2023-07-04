@@ -18,19 +18,20 @@ public class ValidateButtonVR : MonoBehaviour
     public TextMeshProUGUI displayValidText; // Reference to the TextMeshProUGUI component in the Canvas
     public string[] ingredientsArray; // Array to store ingredient names
     private OrderManager orderManager; // Reference to the OrderManager script
+    private MainMenu menu; // Reference to the OrderManager script
     public Color redColor = new Color(1f, 0f, 0f); // Red color (full red, no green or blue)
     public Color greenColor = new Color(0f, 1f, 0f); // Green color (full green, no red or blue)
     public bool isValid = false;
     public int points = 0;
     public TextMeshProUGUI displayPointsText;
+    public int maxFailures = 0;
 
     void Start()
     {
         sound = GetComponent<AudioSource>();
         isPressed = false;
-
         // Get the reference to the OrderManager script
-        orderManager = FindObjectOfType<OrderManager>();
+        menu = FindObjectOfType<MainMenu>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -42,8 +43,6 @@ public class ValidateButtonVR : MonoBehaviour
             onPress.Invoke();
             sound.Play();
             isPressed = true;
-
-            ValidateObjects();
         }
     }
 
@@ -67,21 +66,36 @@ public class ValidateButtonVR : MonoBehaviour
         if (isValid)
         {
             //Debug.Log("Order is valid!");
-            displayValidText.text = "Order is valid!";
+            displayValidText.text = "Order was valid! (+10 Points)";
             displayValidText.color = greenColor;
             points += 10;
+            maxFailures = 0;
         }
         else
         {
             //Debug.Log("Order is not valid!");
-            displayValidText.text = "Order is invalid!";
+            displayValidText.text = "Order was invalid! (-10 Points)";
             displayValidText.color = redColor;
             points -= 10;
+            maxFailures++;
+
+            if (maxFailures > 2)
+            {
+                points = 0;
+                displayValidText.text = "";
+                displayPointsText.text = "0 Points";
+                displayText.text = "";
+                maxFailures = 0;
+                isValid = false;
+                menu.BackToMenu();
+                return;
+            }
         }
-        displayPointsText.text = points.ToString() + "Points";
+        displayPointsText.text =
+            points.ToString() + " Points" + "\n" + maxFailures.ToString() + "/3 Failures";
 
         // Destroy the elements for a new order
-        List<string> collidingIngredients = new List<string>();
+        List<GameObject> collidingIngredients = new List<GameObject>();
         Collider[] colliders = Physics.OverlapBox(
             targetCollider.bounds.center,
             targetCollider.bounds.extents,
@@ -93,17 +107,9 @@ public class ValidateButtonVR : MonoBehaviour
             GameObject obj = collider.gameObject;
             if (obj.CompareTag("Ingredient"))
             {
-                collidingIngredients.Add(obj.name);
+                GameObject highestParent = GetHighestParent(obj);
+                Destroy(highestParent);
             }
-        }
-
-        for (int i = 0; i < collidingIngredients.Count; i++)
-        {
-            //Debug.Log("test" + collidingIngredients[i]);
-            var currentCollidingIngredient = GameObject.Find(collidingIngredients[i]);
-            //Debug.Log("test" + currentCollidingIngredient);
-            GameObject highestParent = GetHighestParent(currentCollidingIngredient);
-            Destroy(highestParent);
         }
 
         orderManager.GenerateRandomOrder();
@@ -111,8 +117,10 @@ public class ValidateButtonVR : MonoBehaviour
 
     private void IsCurrentOrderValid()
     {
-        int currentOrderNumber = orderManager.nextOrderNumber - 1;
-        List<string> currentOrderIngredients = orderManager.orders[currentOrderNumber];
+        // get the last element of the orders array
+        orderManager = FindObjectOfType<OrderManager>();
+        Debug.Log(orderManager.orders.Count);
+        List<string> currentOrderIngredients = orderManager.orders[orderManager.orders.Count];
 
         // Iterate over the colliders and check if they match the ingredients in the current order
         Collider[] colliders = Physics.OverlapBox(
