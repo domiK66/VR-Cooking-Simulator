@@ -14,12 +14,15 @@ public class ValidateButtonVR : MonoBehaviour
     GameObject presser;
     AudioSource sound;
     bool isPressed;
-
     public TextMeshProUGUI displayText; // Reference to the TextMeshProUGUI component in the Canvas
+    public TextMeshProUGUI displayValidText; // Reference to the TextMeshProUGUI component in the Canvas
     public string[] ingredientsArray; // Array to store ingredient names
-
     private OrderManager orderManager; // Reference to the OrderManager script
-
+    public Color redColor = new Color(1f, 0f, 0f); // Red color (full red, no green or blue)
+    public Color greenColor = new Color(0f, 1f, 0f); // Green color (full green, no red or blue)
+    public bool isValid = false;
+    public int points = 0;
+    public TextMeshProUGUI displayPointsText;
 
     void Start()
     {
@@ -56,54 +59,112 @@ public class ValidateButtonVR : MonoBehaviour
 
     public void ValidateObjects()
     {
-        Collider[] colliders = Physics.OverlapBox(targetCollider.bounds.center, targetCollider.bounds.extents, targetCollider.transform.rotation);
-
-        int ingredientCount = 0; // Counter for the number of ingredients found
+        //int ingredientCount = 0; // Counter for the number of ingredients found
         displayText.text = ""; // Clear the text display
+
+        // Validate the order
+        IsCurrentOrderValid();
+        if (isValid)
+        {
+            //Debug.Log("Order is valid!");
+            displayValidText.text = "Order is valid!";
+            displayValidText.color = greenColor;
+            points += 10;
+        }
+        else
+        {
+            //Debug.Log("Order is not valid!");
+            displayValidText.text = "Order is invalid!";
+            displayValidText.color = redColor;
+            points -= 10;
+        }
+        displayPointsText.text = points.ToString() + "Points";
+
+        // Destroy the elements for a new order
+        List<string> collidingIngredients = new List<string>();
+        Collider[] colliders = Physics.OverlapBox(
+            targetCollider.bounds.center,
+            targetCollider.bounds.extents,
+            targetCollider.transform.rotation
+        );
 
         foreach (Collider collider in colliders)
         {
             GameObject obj = collider.gameObject;
-
             if (obj.CompareTag("Ingredient"))
             {
+                collidingIngredients.Add(obj.name);
+            }
+        }
+
+        for (int i = 0; i < collidingIngredients.Count; i++)
+        {
+            //Debug.Log("test" + collidingIngredients[i]);
+            var currentCollidingIngredient = GameObject.Find(collidingIngredients[i]);
+            //Debug.Log("test" + currentCollidingIngredient);
+            GameObject highestParent = GetHighestParent(currentCollidingIngredient);
+            Destroy(highestParent);
+        }
+
+        orderManager.GenerateRandomOrder();
+    }
+
+    private void IsCurrentOrderValid()
+    {
+        int currentOrderNumber = orderManager.nextOrderNumber - 1;
+        List<string> currentOrderIngredients = orderManager.orders[currentOrderNumber];
+
+        // Iterate over the colliders and check if they match the ingredients in the current order
+        Collider[] colliders = Physics.OverlapBox(
+            targetCollider.bounds.center,
+            targetCollider.bounds.extents,
+            targetCollider.transform.rotation
+        );
+        List<string> collidingIngredients = new List<string>();
+
+        foreach (Collider collider in colliders)
+        {
+            GameObject obj = collider.gameObject;
+            if (obj.CompareTag("Ingredient"))
+            {
+                collidingIngredients.Add(obj.name);
                 // Display the ingredient name in the TextMeshProUGUI component
                 displayText.text += obj.name + "\n";
+            }
+        }
 
+        // Check if the colliding ingredients match the current order's ingredients
+        if (currentOrderIngredients.Count == collidingIngredients.Count)
+        {
+            isValid = true;
+        }
+
+        for (int i = 0; i < currentOrderIngredients.Count; i++)
+        {
+            if (!collidingIngredients.Contains(currentOrderIngredients[i]))
+            {
+                isValid = false;
+            }
+            else
+            {
+                var currentOrderIngredient = GameObject.Find(currentOrderIngredients[i]);
+                //Debug.Log("test" + currentOrderIngredient);
                 // Access the highest parent GameObject
-                GameObject highestParent = GetHighestParent(obj);
-
+                GameObject highestParent = GetHighestParent(currentOrderIngredient);
                 // Access the component in the highest parent GameObject
                 CookTime cookTime = highestParent.GetComponent<CookTime>();
-
                 // Check if the cooktime script is present in the highest parent GameObject
                 if (cookTime != null)
                 {
                     // Access the public variable of the cooktime script
+                    //Debug.Log("test" + cookTime.cookingState);
                     CookingState cookingState = cookTime.cookingState;
-
-                    // Use the cookingTime variable as needed
-                    Debug.Log("Cooking time of " + obj.name + "'s highest parent: " + cookingState);
-                }
-                else
-                {
-                    Debug.Log("No cooktime script found in " + obj.name + "'s highest parent");
+                    if (cookingState == CookingState.raw || cookingState == CookingState.burned)
+                    {
+                        isValid = false;
+                    }
                 }
             }
-        }
-
-        // Validate the order
-        bool isOrderValid = IsCurrentOrderValid();
-
-        if (isOrderValid)
-        {
-            Debug.Log("Order is valid!");
-            displayText.text += "Order is valid!" + "\n";
-        }
-        else
-        {
-            Debug.Log("Order is not valid!");
-            displayText.text += "Order is invalid!" + "\n";
         }
     }
 
@@ -115,40 +176,5 @@ public class ValidateButtonVR : MonoBehaviour
             parentTransform = parentTransform.parent;
         }
         return parentTransform.gameObject;
-    }
-
-    private bool IsCurrentOrderValid()
-    {
-        int currentOrderNumber = orderManager.nextOrderNumber - 1;
-        List<string> currentOrderIngredients = orderManager.orders[currentOrderNumber];
-
-        // Iterate over the colliders and check if they match the ingredients in the current order
-        Collider[] colliders = Physics.OverlapBox(targetCollider.bounds.center, targetCollider.bounds.extents, targetCollider.transform.rotation);
-        List<string> collidingIngredients = new List<string>();
-
-        foreach (Collider collider in colliders)
-        {
-            GameObject obj = collider.gameObject;
-            if (obj.CompareTag("Ingredient"))
-            {
-                collidingIngredients.Add(obj.name);
-            }
-        }
-
-        // Check if the colliding ingredients match the current order's ingredients
-        if (currentOrderIngredients.Count != collidingIngredients.Count)
-        {
-            return false;
-        }
-
-        for (int i = 0; i < currentOrderIngredients.Count; i++)
-        {
-            if (!collidingIngredients.Contains(currentOrderIngredients[i]))
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

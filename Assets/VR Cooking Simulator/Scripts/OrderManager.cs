@@ -8,6 +8,8 @@ public class OrderManager : MonoBehaviour
     public Dictionary<int, List<string>> orders = new Dictionary<int, List<string>>(); // Dictionary to store orders with order numbers
     public int nextOrderNumber = 0; // Counter for the next order number
     public TextMeshProUGUI orderText; // Reference to the TextMeshProUGUI component for displaying the order
+    public TextMeshProUGUI orderIngredientsText; // Reference to the TextMeshProUGUI component for displaying the order
+
     void Start()
     {
         GenerateRandomOrder();
@@ -30,10 +32,10 @@ public class OrderManager : MonoBehaviour
 
         orders.Add(nextOrderNumber, ingredients);
 
-        Debug.Log("Generated order #" + nextOrderNumber + ": " + string.Join(", ", ingredients));
+        //Debug.Log("Generated order #" + nextOrderNumber + ": " + string.Join(", ", ingredients));
 
-        orderText.text = "Generated order #" + nextOrderNumber + ": " + string.Join(", ", ingredients);
-
+        orderText.text = "Order #" + nextOrderNumber + ": ";
+        orderIngredientsText.text = string.Join(", ", ingredients);
         nextOrderNumber++;
     }
 }
