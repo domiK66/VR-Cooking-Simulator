@@ -117,7 +117,7 @@ public class ValidateButtonVR : MonoBehaviour
     private void IsCurrentOrderValid()
     {
         // get the last element of the orders array
-        Debug.Log(orderManager.orders.Count);
+        // Debug.Log(orderManager.orders.Count);
         List<string> currentOrderIngredients = orderManager.orders[orderManager.orders.Count];
 
         // Iterate over the colliders and check if they match the ingredients in the current order
@@ -126,6 +126,7 @@ public class ValidateButtonVR : MonoBehaviour
             targetCollider.bounds.extents,
             targetCollider.transform.rotation
         );
+
         List<string> collidingIngredients = new List<string>();
 
         foreach (Collider collider in colliders)
@@ -136,41 +137,41 @@ public class ValidateButtonVR : MonoBehaviour
                 collidingIngredients.Add(obj.name);
                 // Display the ingredient name in the TextMeshProUGUI component
                 displayText.text += obj.name + "\n";
+
+                if (!currentOrderIngredients.Contains(obj.name))
+                {
+                    isValid = false;
+                }
+                else
+                {
+                    var currentOrderIngredient = obj;
+                    //Debug.Log("test" + currentOrderIngredient);
+                    // Access the highest parent GameObject
+                    GameObject highestParent = GetHighestParent(currentOrderIngredient);
+                    // Access the component in the highest parent GameObject
+                    CookTime cookTime = highestParent.GetComponent<CookTime>();
+                    // Check if the cooktime script is present in the highest parent GameObject
+                    if (cookTime != null)
+                    {
+                        // Access the public variable of the cooktime script
+                        //Debug.Log("test" + cookTime.cookingState);
+                        CookingState cookingState = cookTime.cookingState;
+                        if (cookingState == CookingState.raw || cookingState == CookingState.burned)
+                        {
+                            isValid = false;
+                        }
+                    }
+                }
             }
         }
-
         // Check if the colliding ingredients match the current order's ingredients
         if (currentOrderIngredients.Count == collidingIngredients.Count)
         {
             isValid = true;
         }
-
-        for (int i = 0; i < currentOrderIngredients.Count; i++)
+        else
         {
-            if (!collidingIngredients.Contains(currentOrderIngredients[i]))
-            {
-                isValid = false;
-            }
-            else
-            {
-                var currentOrderIngredient = GameObject.Find(currentOrderIngredients[i]);
-                //Debug.Log("test" + currentOrderIngredient);
-                // Access the highest parent GameObject
-                GameObject highestParent = GetHighestParent(currentOrderIngredient);
-                // Access the component in the highest parent GameObject
-                CookTime cookTime = highestParent.GetComponent<CookTime>();
-                // Check if the cooktime script is present in the highest parent GameObject
-                if (cookTime != null)
-                {
-                    // Access the public variable of the cooktime script
-                    //Debug.Log("test" + cookTime.cookingState);
-                    CookingState cookingState = cookTime.cookingState;
-                    if (cookingState == CookingState.raw || cookingState == CookingState.burned)
-                    {
-                        isValid = false;
-                    }
-                }
-            }
+            isValid = false;
         }
     }
 
