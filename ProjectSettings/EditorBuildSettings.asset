@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/VR Cooking Simulator/Scenes/FirstTry.unity
+    path: Assets/VR Cooking Simulator/Scenes/VRCookingSimulator.unity
     guid: 1b0bbd53c701b9648895a6f57fc53cd5
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 3876769f7c65f4347993cd6ed167e308, type: 2}

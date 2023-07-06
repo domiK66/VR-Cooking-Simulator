@@ -24,12 +24,11 @@ public class MainMenu : MonoBehaviour
         validateButtonVR.displayValidText.text = "";
         validateButtonVR.displayText.text = "";
 
-        GameObject[] ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
+        GameObject[] ingredientObjects = GameObject.FindGameObjectsWithTag("IngredientDelete");
 
         foreach (GameObject obj in ingredientObjects)
         {
-            GameObject highestParent = validateButtonVR.GetHighestParent(obj);
-            Destroy(highestParent); // Destroy the parent object
+            Destroy(obj);
         }
 
         gameObject.SetActive(true);
@@ -48,6 +47,10 @@ public class MainMenu : MonoBehaviour
         orderManager.GenerateRandomOrder();
         gameObject.SetActive(false);
         newGameGameObjects.SetActive(true);
+        var ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
+        var TextIngredients = GameObject.FindGameObjectWithTag("TextIngredients");
+        TextIngredients.GetComponent<TMPro.TextMeshProUGUI>().text =
+            "Ingredients: " + ingredientObjects.Length + " / 30";
     }
 
     public void NewTutorial()
@@ -56,6 +59,10 @@ public class MainMenu : MonoBehaviour
         gameObject.SetActive(false);
         newGameGameObjects.SetActive(true);
         tutorialGameObjects.SetActive(true);
+        var ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
+        var TextIngredients = GameObject.FindGameObjectWithTag("TextIngredients");
+        TextIngredients.GetComponent<TMPro.TextMeshProUGUI>().text =
+            "Ingredients: " + ingredientObjects.Length + " / 30";
     }
 
     public void OpenCredits()

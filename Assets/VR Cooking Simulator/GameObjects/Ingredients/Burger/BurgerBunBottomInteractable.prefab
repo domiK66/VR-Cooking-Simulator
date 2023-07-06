@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 6703525035567111255}
   m_Layer: 0
   m_Name: BurgerBunBottomInteractable
-  m_TagString: Untagged
+  m_TagString: IngredientDelete
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

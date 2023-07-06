@@ -16,6 +16,9 @@ public class ValidateButtonVR : MonoBehaviour
     bool isPressed;
     public TextMeshProUGUI displayText; // Reference to the TextMeshProUGUI component in the Canvas
     public TextMeshProUGUI displayValidText; // Reference to the TextMeshProUGUI component in the Canvas
+
+    public TextMeshProUGUI displayLastOrderText; // Reference to the TextMeshProUGUI component in the Canvas
+    public TextMeshProUGUI displayLastOrderIngredients;
     public string[] ingredientsArray; // Array to store ingredient names
     public OrderManager orderManager; // Reference to the OrderManager script
     public MainMenu menu; // Reference to the OrderManager script
@@ -62,6 +65,11 @@ public class ValidateButtonVR : MonoBehaviour
 
         // Validate the order
         IsCurrentOrderValid();
+        displayLastOrderText.text = "Last order: Order #" + (orderManager.nextOrderNumber - 1);
+        displayLastOrderIngredients.text = string.Join(
+            "\n",
+            orderManager.orders[orderManager.nextOrderNumber - 1]
+        );
         if (isValid)
         {
             //Debug.Log("Order is valid!");
@@ -84,6 +92,8 @@ public class ValidateButtonVR : MonoBehaviour
                 displayValidText.text = "";
                 displayPointsText.text = "0 Points";
                 displayText.text = "";
+                displayLastOrderText.text = "Last order:";
+                displayLastOrderIngredients.text = "No order delivered yet";
                 maxFailures = 0;
                 isValid = false;
                 menu.BackToMenu();
@@ -91,7 +101,7 @@ public class ValidateButtonVR : MonoBehaviour
             }
         }
         displayPointsText.text =
-            points.ToString() + " Points" + "\n" + maxFailures.ToString() + "/3 Failures";
+            points.ToString() + " Points" + "\n" + maxFailures.ToString() + "/3 Failures" + "\n" + "Orders delivered: " + (orderManager.nextOrderNumber - 1).ToString();
 
         // Destroy the elements for a new order
         List<GameObject> collidingIngredients = new List<GameObject>();
@@ -106,7 +116,7 @@ public class ValidateButtonVR : MonoBehaviour
             GameObject obj = collider.gameObject;
             if (obj.CompareTag("Ingredient"))
             {
-                GameObject highestParent = GetHighestParent(obj);
+                GameObject highestParent = GetHighestParentWithTag(obj, "IngredientDelete");
                 Destroy(highestParent);
             }
         }
@@ -147,7 +157,10 @@ public class ValidateButtonVR : MonoBehaviour
                     var currentOrderIngredient = obj;
                     //Debug.Log("test" + currentOrderIngredient);
                     // Access the highest parent GameObject
-                    GameObject highestParent = GetHighestParent(currentOrderIngredient);
+                    GameObject highestParent = GetHighestParentWithTag(
+                        currentOrderIngredient,
+                        "IngredientDelete"
+                    );
                     // Access the component in the highest parent GameObject
                     CookTime cookTime = highestParent.GetComponent<CookTime>();
                     // Check if the cooktime script is present in the highest parent GameObject
@@ -183,5 +196,19 @@ public class ValidateButtonVR : MonoBehaviour
             parentTransform = parentTransform.parent;
         }
         return parentTransform.gameObject;
+    }
+
+    private GameObject GetHighestParentWithTag(GameObject child, string tag)
+    {
+        Transform parentTransform = child.transform.parent;
+        while (parentTransform != null)
+        {
+            if (parentTransform.CompareTag(tag))
+            {
+                return parentTransform.gameObject;
+            }
+            parentTransform = parentTransform.parent;
+        }
+        return null;
     }
 }

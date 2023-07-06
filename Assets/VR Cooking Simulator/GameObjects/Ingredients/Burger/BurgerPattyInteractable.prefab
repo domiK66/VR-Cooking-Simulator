@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 787590912675734835}
   m_Layer: 0
   m_Name: BurgerPattyInteractable
-  m_TagString: Untagged
+  m_TagString: IngredientDelete
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -390,7 +390,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   time: 0
   cookingState: 0
-  timeText: {fileID: 0}
   Renderer: {fileID: 12441187538712935}
   goodMaterial: {fileID: 2100000, guid: eb554cb8688234f4d93bf70931432951, type: 2}
   overcookedMaterial: {fileID: 2100000, guid: 227dfd2e5e234fc4e9d48f9187bfe496, type: 2}
@@ -1251,7 +1250,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 2
     angle: 8.31
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -1338,7 +1337,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.01
+      value: 0.07
       mode: 0
       spread: 0
       speed:

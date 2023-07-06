@@ -8,6 +8,10 @@ TagManager:
   - Centerable
   - SamplesInfoPanel
   - Ingredient
+  - GrillAreaCollider2
+  - IngredientDelete
+  - TextIngredients
+  - GrillAreaCollider3
   layers:
   - Default
   - TransparentFX

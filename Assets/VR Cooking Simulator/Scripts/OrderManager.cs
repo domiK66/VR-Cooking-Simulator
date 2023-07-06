@@ -50,34 +50,8 @@ public class OrderManager : MonoBehaviour
 
         orderText.text = "Order #" + nextOrderNumber + ": ";
 
-        if (ingredients.Contains("Bun01") && ingredients.Contains("Bun02"))
-        {
-            orderIngredientsText.text = "Hot Dog";
-        }
-        else
-        {
-            orderIngredientsText.text = "Burger with Patty, ";
+        orderIngredientsText.text = string.Join("\n", ingredients);
 
-            string[] ingredientArray = ingredients
-                .Where(x => x != "BurgerBunTop" && x != "BurgerBunBottom" && x != "BurgerPatty")
-                .ToArray();
-
-            for (int i = 0; i < ingredientArray.Length; i++)
-            {
-                if (ingredientArray.Count() == 1)
-                {
-                    orderIngredientsText.text += ingredientArray[i];
-                }
-                else if (i == ingredientArray.Length - 1)
-                {
-                    orderIngredientsText.text += "and " + ingredientArray[i];
-                }
-                else
-                {
-                    orderIngredientsText.text += ingredientArray[i] + ", ";
-                }
-            }
-        }
         nextOrderNumber++;
     }
 }
