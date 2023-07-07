@@ -18,6 +18,9 @@ public class OrderManager : MonoBehaviour
         bool isBurger = Random.value < 0.5;
 
         if (isBurger)
+            ingredients.Add("Drink");
+
+        if (isBurger)
         {
             ingredients.Add("BurgerBunTop");
             ingredients.Add("BurgerPatty");
