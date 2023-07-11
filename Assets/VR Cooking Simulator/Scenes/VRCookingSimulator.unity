@@ -31929,9 +31929,9 @@ MonoBehaviour:
   onRelease:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8932400727678848438}
+      - m_Target: {fileID: 8932400727678848429}
         m_TargetAssemblyTypeName: ButtonVR, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: SpawnGameObject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
