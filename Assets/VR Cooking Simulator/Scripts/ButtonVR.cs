@@ -20,6 +20,7 @@ public class ButtonVR : MonoBehaviour
     {
         sound = GetComponent<AudioSource>();
         isPressed = false;
+        this.gameObject.GetComponent<Collider>().enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -33,7 +34,7 @@ public class ButtonVR : MonoBehaviour
             sound.Play();
             isPressed = true;
             var ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
-            if (ingredientObjects.Length < 30 && colorChange)
+            if (ingredientObjects.Length <= 29 && colorChange)
             {
                 var buttonMaterial = button.GetComponent<Renderer>().material;
                 buttonMaterial.color = Color.green;
@@ -58,20 +59,32 @@ public class ButtonVR : MonoBehaviour
                 var buttonMaterial = button.GetComponent<Renderer>().material;
                 buttonMaterial.color = Color.grey;
             }
+            StartCoroutine(DisableColliderForSeconds(1f, this.gameObject.GetComponent<Collider>()));
         }
+    }
+
+    private System.Collections.IEnumerator DisableColliderForSeconds(
+        float duration,
+        Collider colliderToDisable
+    )
+    {
+        colliderToDisable.enabled = false;
+
+        yield return new WaitForSeconds(duration);
+
+        colliderToDisable.enabled = true;
     }
 
     public void SpawnGameObject()
     {
         var ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
-        if (ingredientObjects.Length < 30)
+        if (ingredientObjects.Length <= 29)
         {
             Vector3 newPosition = transform.position + offset;
             GameObject spawnedObject = Instantiate(prefab, newPosition, Quaternion.identity);
+            var TextIngredients = GameObject.FindGameObjectWithTag("TextIngredients");
+            TextIngredients.GetComponent<TMPro.TextMeshProUGUI>().text =
+                "Ingredients: " + (ingredientObjects.Length + 1) + " / 30";
         }
-
-        var TextIngredients = GameObject.FindGameObjectWithTag("TextIngredients");
-        TextIngredients.GetComponent<TMPro.TextMeshProUGUI>().text =
-            "Ingredients: " + ingredientObjects.Length + " / 30";
     }
 }

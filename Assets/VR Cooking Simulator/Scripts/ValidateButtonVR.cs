@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using System;
+using System.Linq;
 
 public class ValidateButtonVR : MonoBehaviour
 {
@@ -16,7 +18,6 @@ public class ValidateButtonVR : MonoBehaviour
     bool isPressed;
     public TextMeshProUGUI displayText; // Reference to the TextMeshProUGUI component in the Canvas
     public TextMeshProUGUI displayValidText; // Reference to the TextMeshProUGUI component in the Canvas
-
     public TextMeshProUGUI displayLastOrderText; // Reference to the TextMeshProUGUI component in the Canvas
     public TextMeshProUGUI displayLastOrderIngredients;
     public string[] ingredientsArray; // Array to store ingredient names
@@ -28,12 +29,15 @@ public class ValidateButtonVR : MonoBehaviour
     public int points = 0;
     public TextMeshProUGUI displayPointsText;
     public int maxFailures = 0;
+    public AudioSource successSound;
+    public AudioSource failureSound;
+    public DateTime validateTime = new DateTime();
+    public float bufferTime = 10;
 
     void Start()
     {
         sound = GetComponent<AudioSource>();
         isPressed = false;
-        // Get the reference to the OrderManager script
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,6 +49,7 @@ public class ValidateButtonVR : MonoBehaviour
             onPress.Invoke();
             sound.Play();
             isPressed = true;
+            //StartCoroutine(DisableColliderForSeconds(1f, this.gameObject.GetComponent<Collider>()));
         }
     }
 
@@ -53,9 +58,26 @@ public class ValidateButtonVR : MonoBehaviour
         if (other.gameObject == presser)
         {
             button.transform.localPosition = new Vector3(0, 0.015f, 0);
-            onRelease.Invoke();
+            var timeSpan = DateTime.Now - validateTime;
+            if (timeSpan.TotalSeconds > bufferTime)
+            {
+                onRelease.Invoke();
+                validateTime = DateTime.Now;
+            }
             isPressed = false;
         }
+    }
+
+    private System.Collections.IEnumerator DisableColliderForSeconds(
+        float duration,
+        Collider colliderToDisable
+    )
+    {
+        colliderToDisable.enabled = false;
+
+        yield return new WaitForSeconds(duration);
+
+        colliderToDisable.enabled = true;
     }
 
     public void ValidateObjects()
@@ -73,6 +95,7 @@ public class ValidateButtonVR : MonoBehaviour
         if (isValid)
         {
             //Debug.Log("Order is valid!");
+            successSound.Play();
             displayValidText.text = "Order was valid! (+10 Points)";
             displayValidText.color = greenColor;
             points += 10;
@@ -81,6 +104,7 @@ public class ValidateButtonVR : MonoBehaviour
         else
         {
             //Debug.Log("Order is not valid!");
+            failureSound.Play();
             displayValidText.text = "Order was invalid! (-10 Points)";
             displayValidText.color = redColor;
             points -= 10;
@@ -101,7 +125,14 @@ public class ValidateButtonVR : MonoBehaviour
             }
         }
         displayPointsText.text =
-            points.ToString() + " Points" + "\n" + maxFailures.ToString() + "/3 Failures" + "\n" + "Orders delivered: " + (orderManager.nextOrderNumber - 1).ToString();
+            points.ToString()
+            + " Points"
+            + "\n"
+            + maxFailures.ToString()
+            + "/3 Failures"
+            + "\n"
+            + "Orders delivered: "
+            + (orderManager.nextOrderNumber - 1).ToString();
 
         // Destroy the elements for a new order
         List<GameObject> collidingIngredients = new List<GameObject>();
@@ -139,14 +170,28 @@ public class ValidateButtonVR : MonoBehaviour
 
         List<string> collidingIngredients = new List<string>();
 
+        // Check if the colliding ingredients match the current order's ingredients
+        if (currentOrderIngredients.Count == collidingIngredients.Count)
+        {
+            isValid = true;
+        }
+        else
+        {
+            isValid = false;
+        }
+
         foreach (Collider collider in colliders)
         {
             GameObject obj = collider.gameObject;
             if (obj.CompareTag("Ingredient"))
             {
                 collidingIngredients.Add(obj.name);
+
                 // Display the ingredient name in the TextMeshProUGUI component
                 displayText.text += obj.name + "\n";
+
+                // Check if the colliding ingredients match the current order's ingredients
+                // If the colliding ingredients don't match the current order's ingredients, the order is not valid also it should not be valid if the order has not the right amount of ingredient types
 
                 if (!currentOrderIngredients.Contains(obj.name))
                 {
@@ -176,15 +221,6 @@ public class ValidateButtonVR : MonoBehaviour
                     }
                 }
             }
-        }
-        // Check if the colliding ingredients match the current order's ingredients
-        if (currentOrderIngredients.Count == collidingIngredients.Count)
-        {
-            isValid = true;
-        }
-        else
-        {
-            isValid = false;
         }
     }
 

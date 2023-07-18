@@ -770,4 +770,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a105c7917479fb4d96e208b042c9128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothTime: 0.2

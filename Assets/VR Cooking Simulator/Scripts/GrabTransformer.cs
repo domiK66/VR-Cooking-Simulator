@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class GrabTransformer : MonoBehaviour, ITransformer
 {
-    public float smoothTime = 0;
+    private float smoothTime = 0.1f;
 
     private IGrabbable grabbable;
     private Pose grabDeltaInLocalSpace;
@@ -26,14 +26,15 @@ public class GrabTransformer : MonoBehaviour, ITransformer
         this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         Pose grabPoint = grabbable.GrabPoints[0];
         var targetTransform = grabbable.Transform;
-        grabDeltaInLocalSpace = new Pose(targetTransform.InverseTransformVector(grabPoint.position - targetTransform.position),
-                                        Quaternion.Inverse(grabPoint.rotation) * targetTransform.rotation);
+        grabDeltaInLocalSpace = new Pose(
+            targetTransform.InverseTransformVector(grabPoint.position - targetTransform.position),
+            Quaternion.Inverse(grabPoint.rotation) * targetTransform.rotation
+        );
     }
 
     // Update position and rotation of the grabable, while grabbing
     public void UpdateTransform()
-    {   
-    
+    {
         Pose grabPoint = grabbable.GrabPoints[0];
         var targetTransform = grabbable.Transform;
 
@@ -43,17 +44,27 @@ public class GrabTransformer : MonoBehaviour, ITransformer
         // Get target position
         Vector3 targetPosition;
 
-        targetPosition = grabPoint.position - targetTransform.TransformVector(grabDeltaInLocalSpace.position);
+        targetPosition =
+            grabPoint.position - targetTransform.TransformVector(grabDeltaInLocalSpace.position);
 
         // Set position
-        targetTransform.position = Vector3.SmoothDamp(targetTransform.position, targetPosition, ref velocity, smoothTime);
+        targetTransform.position = Vector3.SmoothDamp(
+            targetTransform.position,
+            targetPosition,
+            ref velocity,
+            smoothTime
+        );
 
         // Set rotation
-        targetTransform.rotation = Quaternion.Slerp(targetTransform.rotation, targetRotation, smoothTime);
+        targetTransform.rotation = Quaternion.Slerp(
+            targetTransform.rotation,
+            targetRotation,
+            smoothTime
+        );
     }
 
-    public void EndTransform() {
+    public void EndTransform()
+    {
         this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
-
 }

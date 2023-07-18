@@ -15,12 +15,13 @@ public class OrderManager : MonoBehaviour
     {
         List<string> ingredients = new List<string>();
 
-        bool isBurger = Random.value < 0.5;
+        //Debug.Log("RANDOM" + Random.value);
 
-        if (isBurger)
-            ingredients.Add("Drink");
+        bool isBurgerAndNotHotdog = Random.value < 0.5;
+        bool orderWithDrink = Random.value < 0.5;
+        bool orderWithDrink2 = Random.value < 0.4;
 
-        if (isBurger)
+        if (isBurgerAndNotHotdog)
         {
             ingredients.Add("BurgerBunTop");
             ingredients.Add("BurgerPatty");
@@ -34,11 +35,20 @@ public class OrderManager : MonoBehaviour
                 "BurgerPatty"
             };
 
+            float ingredientProbability = 0.1f; // Initial probability of including each ingredient
+
             foreach (string ingredient in burgerIngredients)
             {
-                if (Random.value < 0.5) // Randomly include or exclude each ingredient
+                if (Random.value < ingredientProbability)
                 {
                     ingredients.Add(ingredient);
+                }
+
+                ingredientProbability += 0.1f; // Increase the probability for each ingredient
+
+                if (ingredientProbability > 0.8f)
+                {
+                    ingredientProbability -= Random.value; // Limit the probability to 50%
                 }
             }
 
@@ -46,7 +56,16 @@ public class OrderManager : MonoBehaviour
         }
         else
         {
-            ingredients.AddRange(new string[] { "HotDog", "Bun01", "Bun02" });
+            ingredients.AddRange(new string[] { "HotDog", "HotdogBun" });
+        }
+
+        if (orderWithDrink)
+        {
+            ingredients.Add("Drink");
+        }
+        if (orderWithDrink2)
+        {
+            ingredients.Add("Drink");
         }
 
         orders.Add(nextOrderNumber, ingredients);

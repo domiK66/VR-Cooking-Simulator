@@ -69,7 +69,7 @@ public class CookTime : MonoBehaviour
                 Renderer.material = goodMaterial;
                 cookingState = CookingState.good;
             }
-            else if (time >= targetTime + 10f)
+            else if (time >= targetTime + 30f)
             {
                 // Apply overcooked material
                 Renderer.material = overcookedMaterial;

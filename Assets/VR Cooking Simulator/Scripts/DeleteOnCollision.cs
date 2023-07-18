@@ -14,6 +14,10 @@ public class DeleteOnCollision : MonoBehaviour
                 Destroy(parent.gameObject);
             }
         }
+        var ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
+        var TextIngredients = GameObject.FindGameObjectWithTag("TextIngredients");
+        TextIngredients.GetComponent<TMPro.TextMeshProUGUI>().text =
+            "Ingredients: " + (ingredientObjects.Length - 1) + " / 30";
     }
 
     private Transform GetHighestParentWithTag(Transform child, string tag)
