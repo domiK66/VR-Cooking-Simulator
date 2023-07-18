@@ -49,7 +49,6 @@ public class ValidateButtonVR : MonoBehaviour
             onPress.Invoke();
             sound.Play();
             isPressed = true;
-            //StartCoroutine(DisableColliderForSeconds(1f, this.gameObject.GetComponent<Collider>()));
         }
     }
 
@@ -68,21 +67,9 @@ public class ValidateButtonVR : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator DisableColliderForSeconds(
-        float duration,
-        Collider colliderToDisable
-    )
-    {
-        colliderToDisable.enabled = false;
-
-        yield return new WaitForSeconds(duration);
-
-        colliderToDisable.enabled = true;
-    }
-
     public void ValidateObjects()
     {
-        //int ingredientCount = 0; // Counter for the number of ingredients found
+        // int ingredientCount = 0; // Counter for the number of ingredients found
         displayText.text = ""; // Clear the text display
 
         // Validate the order
@@ -155,10 +142,11 @@ public class ValidateButtonVR : MonoBehaviour
         orderManager.GenerateRandomOrder();
     }
 
+    public bool isCookTimeValid = false;
+
     private void IsCurrentOrderValid()
     {
-        // get the last element of the orders array
-        // Debug.Log(orderManager.orders.Count);
+        // Get the last element of the orders array
         List<string> currentOrderIngredients = orderManager.orders[orderManager.orders.Count];
 
         // Iterate over the colliders and check if they match the ingredients in the current order
@@ -170,28 +158,14 @@ public class ValidateButtonVR : MonoBehaviour
 
         List<string> collidingIngredients = new List<string>();
 
-        // Check if the colliding ingredients match the current order's ingredients
-        if (currentOrderIngredients.Count == collidingIngredients.Count)
-        {
-            isValid = true;
-        }
-        else
-        {
-            isValid = false;
-        }
-
         foreach (Collider collider in colliders)
         {
             GameObject obj = collider.gameObject;
             if (obj.CompareTag("Ingredient"))
             {
-                collidingIngredients.Add(obj.name);
-
                 // Display the ingredient name in the TextMeshProUGUI component
                 displayText.text += obj.name + "\n";
-
-                // Check if the colliding ingredients match the current order's ingredients
-                // If the colliding ingredients don't match the current order's ingredients, the order is not valid also it should not be valid if the order has not the right amount of ingredient types
+                collidingIngredients.Add(obj.name);
 
                 if (!currentOrderIngredients.Contains(obj.name))
                 {
@@ -199,9 +173,8 @@ public class ValidateButtonVR : MonoBehaviour
                 }
                 else
                 {
-                    var currentOrderIngredient = obj;
-                    //Debug.Log("test" + currentOrderIngredient);
                     // Access the highest parent GameObject
+                    var currentOrderIngredient = obj;
                     GameObject highestParent = GetHighestParentWithTag(
                         currentOrderIngredient,
                         "IngredientDelete"
@@ -212,26 +185,22 @@ public class ValidateButtonVR : MonoBehaviour
                     if (cookTime != null)
                     {
                         // Access the public variable of the cooktime script
-                        //Debug.Log("test" + cookTime.cookingState);
                         CookingState cookingState = cookTime.cookingState;
                         if (cookingState == CookingState.raw || cookingState == CookingState.burned)
                         {
-                            isValid = false;
+                            isCookTimeValid = false;
                         }
+                        isCookTimeValid = true;
                     }
                 }
             }
         }
-    }
 
-    public GameObject GetHighestParent(GameObject obj)
-    {
-        Transform parentTransform = obj.transform;
-        while (parentTransform.parent != null)
-        {
-            parentTransform = parentTransform.parent;
-        }
-        return parentTransform.gameObject;
+        // Check if the colliding ingredients match the current order's ingredients
+        isValid =
+            currentOrderIngredients.Count == collidingIngredients.Count
+            && currentOrderIngredients.All(collidingIngredients.Contains)
+            && isCookTimeValid;
     }
 
     private GameObject GetHighestParentWithTag(GameObject child, string tag)

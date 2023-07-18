@@ -1127,8 +1127,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 6.5319676, y: 1, z: 1}
+  m_Center: {x: 2.7659814, y: 0, z: 2.0156356e-16}
 --- !u!23 &90791270
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5365,6 +5365,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 870131987060394026, guid: 5889b5b9f775048499615a8d77939812, type: 3}
+      propertyPath: m_Size.z
+      value: 0.7494045
+      objectReference: {fileID: 0}
+    - target: {fileID: 870131987060394026, guid: 5889b5b9f775048499615a8d77939812, type: 3}
+      propertyPath: m_Center.z
+      value: 0.11147371
+      objectReference: {fileID: 0}
     - target: {fileID: 870131987721306195, guid: 5889b5b9f775048499615a8d77939812, type: 3}
       propertyPath: m_RootOrder
       value: 14
@@ -5420,6 +5428,10 @@ PrefabInstance:
     - target: {fileID: 870131987998763723, guid: 5889b5b9f775048499615a8d77939812, type: 3}
       propertyPath: m_TagString
       value: GrillAreaCollider2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6128414556244895485, guid: 5889b5b9f775048499615a8d77939812, type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5889b5b9f775048499615a8d77939812, type: 3}
@@ -8437,7 +8449,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3859683449873972227, guid: c8909765194b507419bc0fd3dd4fc4b8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.279
+      value: -0.294
       objectReference: {fileID: 0}
     - target: {fileID: 3859683449873972227, guid: c8909765194b507419bc0fd3dd4fc4b8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -18069,8 +18081,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 5.214747, y: 1, z: 1}
+  m_Center: {x: 2.1073713, y: 0, z: 4.355489e-16}
 --- !u!23 &1862647757
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -20827,6 +20839,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1235428389070537997, guid: 60c3d7ed0791e434dae01feaf6fce1bf, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1235428389070537997, guid: 60c3d7ed0791e434dae01feaf6fce1bf, type: 3}
       propertyPath: Priority
       value: 125
