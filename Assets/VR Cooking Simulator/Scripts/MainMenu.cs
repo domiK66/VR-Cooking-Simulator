@@ -10,6 +10,19 @@ public class MainMenu : MonoBehaviour
     public OrderManager orderManager;
     public ValidateButtonVR validateButtonVR;
 
+    public GameObject tutorialInteractables;
+
+    public GameObject Interactables;
+
+    public AudioSource menuMusic;
+
+    public ParticleSystem musicParticles;
+
+    public void Start()
+    {
+        menuMusic.Play();
+    }
+
     public void BackToMenu()
     {
         orderManager.orders = new Dictionary<int, List<string>>();
@@ -24,17 +37,18 @@ public class MainMenu : MonoBehaviour
         validateButtonVR.displayValidText.text = "";
         validateButtonVR.displayText.text = "";
 
-        GameObject[] ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
+        GameObject[] ingredientObjects = GameObject.FindGameObjectsWithTag("IngredientDelete");
 
         foreach (GameObject obj in ingredientObjects)
         {
-            GameObject highestParent = validateButtonVR.GetHighestParent(obj);
-            Destroy(highestParent); // Destroy the parent object
+            Destroy(obj);
         }
 
         gameObject.SetActive(true);
         newGameGameObjects.SetActive(false);
         tutorialGameObjects.SetActive(false);
+        menuMusic.Play();
+        musicParticles.Play();
     }
 
     public void BackToMenuFromCredits()
@@ -45,17 +59,44 @@ public class MainMenu : MonoBehaviour
 
     public void NewGame()
     {
+        //menuMusic.Stop();
         orderManager.GenerateRandomOrder();
         gameObject.SetActive(false);
         newGameGameObjects.SetActive(true);
+        var ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
+        var TextIngredients = GameObject.FindGameObjectWithTag("TextIngredients");
+        TextIngredients.GetComponent<TMPro.TextMeshProUGUI>().text =
+            "Ingredients: " + ingredientObjects.Length + " / 30";
+        Instantiate(
+            Interactables,
+            new Vector3(-1.0038172f, 0.983418643f, -0.134758055f),
+            Quaternion.identity
+        );
     }
 
     public void NewTutorial()
     {
+        musicParticles.Stop();
+        menuMusic.Stop();
         orderManager.GenerateRandomOrder();
         gameObject.SetActive(false);
         newGameGameObjects.SetActive(true);
         tutorialGameObjects.SetActive(true);
+        var ingredientObjects = GameObject.FindGameObjectsWithTag("Ingredient");
+        var TextIngredients = GameObject.FindGameObjectWithTag("TextIngredients");
+        TextIngredients.GetComponent<TMPro.TextMeshProUGUI>().text =
+            "Ingredients: " + ingredientObjects.Length + " / 30";
+
+        Instantiate(
+            Interactables,
+            new Vector3(-1.0038172f, 0.983418643f, -0.134758055f),
+            Quaternion.identity
+        );
+        Instantiate(
+            tutorialInteractables,
+            new Vector3(-0.0449822545f, 0.845037818f, 0.322987556f),
+            Quaternion.identity
+        );
     }
 
     public void OpenCredits()
