@@ -190,7 +190,10 @@ public class ValidateButtonVR : MonoBehaviour
                         {
                             isCookTimeValid = false;
                         }
-                        isCookTimeValid = true;
+                        else if (cookingState == CookingState.good)
+                        {
+                            isCookTimeValid = true;
+                        }
                     }
                 }
             }

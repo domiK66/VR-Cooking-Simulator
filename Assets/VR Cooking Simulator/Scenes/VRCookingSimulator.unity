@@ -5431,7 +5431,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6128414556244895485, guid: 5889b5b9f775048499615a8d77939812, type: 3}
       propertyPath: m_Convex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5889b5b9f775048499615a8d77939812, type: 3}
@@ -20932,6 +20932,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 870131987060394026, guid: 5889b5b9f775048499615a8d77939812, type: 3}
+      propertyPath: m_Size.z
+      value: 0.7180952
+      objectReference: {fileID: 0}
+    - target: {fileID: 870131987060394026, guid: 5889b5b9f775048499615a8d77939812, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 870131987060394026, guid: 5889b5b9f775048499615a8d77939812, type: 3}
+      propertyPath: m_Center.z
+      value: 0.12712835
+      objectReference: {fileID: 0}
     - target: {fileID: 870131987721306195, guid: 5889b5b9f775048499615a8d77939812, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -27196,6 +27208,7 @@ MonoBehaviour:
   successSound: {fileID: 7274058445809513793}
   failureSound: {fileID: 7274058445809513794}
   bufferTime: 2
+  isCookTimeValid: 0
 --- !u!82 &7274058445809513793
 AudioSource:
   m_ObjectHideFlags: 0
